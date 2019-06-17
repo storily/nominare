@@ -28,11 +28,6 @@ class Nominare < Sinatra::Application
     } }.to_json
   end
 
-  get '/kinds.png' do
-    content_type :png
-    send_file File.expand_path('kinds.png')
-  end
-
   get '/stats' do
     Name.stats.to_json
   end
