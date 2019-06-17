@@ -9,7 +9,7 @@ Name generation server.
 
 - `RACK_ENV=` Currently only used for Bundler loading. Defaults to `production`.
 
-- `DATABASE_URL=` Points to a Postgres server (defaults to a local server).
+- `DATABASE_URL=` Points to a Postgres server.
 
 - `DB_SCHEMA=` The database schema to use (for namespacing inside a single Postgres instance, defaults to `public`).
 
