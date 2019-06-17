@@ -7,17 +7,6 @@ logs "=====> Bootstrapping in #{ENV['RACK_ENV']}"
 require 'bundler'
 Bundler.require :default, ENV['RACK_ENV'].to_sym
 
-logs '=====> Loading framework'
-require './lib/rogare'
-
-logs '=====> Loading goal parser'
-require './lib/goalterms/classes'
-if ENV['RACK_ENV'] == 'production'
-  require './lib/goalterms/grammar.rb'
-else
-  Treetop.load 'lib/goalterms/grammar.treetop'
-end
-
 logs '=====> Loading sequel'
 DB = Rogare.sql
 Sequel::Model.plugin :eager_each
@@ -30,10 +19,3 @@ Dir['./models/*.rb'].each do |p|
   logs "     > #{Pathname.new(p).basename('.rb').to_s.camelize}"
   require p
 end
-
-logs '=====> Preparing statements'
-require './lib/preparation'
-Dir['./preparations/*.rb'].each do |p|
-  require p
-end
-Preparation.bake

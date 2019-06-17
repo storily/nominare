@@ -1,7 +1,0 @@
-.editorconfig
-.git
-.gitignore
-.rubocop.yml
-.travis.yml
-LICENSE
-node_modules
