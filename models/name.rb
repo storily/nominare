@@ -23,11 +23,18 @@ class Name < Sequel::Model(:names_scored)
       args[:freq] ||= []
 
       last = args[:kinds].include? 'last'
-      args[:kinds] -= %w[last male female enby] if last
+      gender = if args[:kinds].include? 'male'
+                 'male'
+               elsif args[:kinds].include? 'female'
+                 'female'
+               end
+
+      args[:kinds] -= %w[first last male female enby] if last
 
       query = select(:name).order { random.function }.where(surname: last).limit(args[:n])
       query = query.where { score >= args[:freq][0] } if args[:freq][0]
       query = query.where { score <= args[:freq][1] } if args[:freq][1]
+      query = query.where(gender: gender) if gender
 
       unless args[:kinds].empty?
         castkinds = to_kinds(args[:kinds].uniq)
@@ -113,16 +120,27 @@ class Name < Sequel::Model(:names_scored)
       queries << select { count('*') }.as(:total)
       queries << where(surname: false).select { count('*') }.as(:firsts)
       queries << where(surname: true).select { count('*') }.as(:lasts)
+      queries << where(surname: false, gender: 'male').select { count('*') }.as(:male)
+      queries << where(surname: false, gender: 'female').select { count('*') }.as(:female)
+      queries << where(surname: false, gender: 'enby').select { count('*') }.as(:enby)
+      queries << where(surname: false, gender: nil).select { count('*') }.as(:unset)
 
       stats = DB.select { queries }.first
       total = stats.delete :total
       firsts = stats.delete :firsts
       lasts = stats.delete :lasts
+      genders = {
+        male: stats.delete(:male),
+        female: stats.delete(:female),
+        enby: stats.delete(:enby),
+        unset: stats.delete(:unset)
+      }
 
       {
         total: total,
         firsts: firsts,
         lasts: lasts,
+        genders: genders,
         kinds: stats
       }
     end

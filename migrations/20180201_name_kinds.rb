@@ -4,12 +4,6 @@ Sequel.migration do
   up do
     run <<-KINDS
     CREATE TYPE name_kind AS ENUM (
-        'male',
-        '-male',
-        'female',
-        '-female',
-        'enby',
-        '-enby',
         'latin',
         '-latin',
         'english',

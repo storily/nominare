@@ -71,18 +71,19 @@ Sequel.migration do
 
       CREATE MATERIALIZED VIEW names_scored_raw AS (
         SELECT
-          name, surname,
+          name, surname, gender,
           anyarray_uniq(array_agg(source)) AS sources,
           namekind_adjustment(anyarray_uniq(array_cat_agg(kinds))) AS kinds,
           (count(*)::double precision / (SELECT count(*) FROM names)) AS score
         FROM names
-        GROUP BY name, surname
+        GROUP BY name, surname, gender
       );
 
       CREATE MATERIALIZED VIEW names_scored AS (
         SELECT
           name,
           surname,
+          gender,
           sources,
           kinds,
           ln(score * 1000000) * 100 / (
@@ -95,6 +96,8 @@ Sequel.migration do
       CREATE INDEX names_scored_kinds_idx ON names_scored USING gin (kinds);
       CREATE INDEX names_scored_kinds_rare_idx ON names_scored USING gin (kinds) WHERE score <= 20;
       CREATE INDEX names_scored_kinds_common_idx ON names_scored USING gin (kinds) WHERE score >= 50;
+      CREATE INDEX names_scored_kinds_female_idx ON names_scored USING gin (kinds) WHERE gender = "female";
+      CREATE INDEX names_scored_kinds_male_idx ON names_scored USING gin (kinds) WHERE gender = "male";
     SCOREUP
   end
 

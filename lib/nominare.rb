@@ -86,10 +86,10 @@ class Nominare < Sinatra::Application
     Name.where(name: name).each do |info|
       key = info.surname ? :last : :first
       kinds = info.kinds.gsub(/[\{\}]/, '').split(',')
-      kinds -= %w[first last]
 
       details[key] = {
         name: Name.format(name),
+        gender: (info.surname ? false : info.gender),
         kinds: kinds,
         sources: info.sources,
         score: info.score
