@@ -29,12 +29,14 @@ class Name < Sequel::Model(:names_scored)
                  'female'
                end
 
-      args[:kinds] -= %w[first last male female enby] if last
+      args[:kinds] -= %w[first last male female enby]
 
       query = select(:name).order { random.function }.where(surname: last).limit(args[:n])
       query = query.where { score >= args[:freq][0] } if args[:freq][0]
       query = query.where { score <= args[:freq][1] } if args[:freq][1]
       query = query.where(gender: gender) if gender
+
+      puts args[:kinds].inspect
 
       unless args[:kinds].empty?
         castkinds = to_kinds(args[:kinds].uniq)
@@ -123,7 +125,6 @@ class Name < Sequel::Model(:names_scored)
       queries << where(surname: false, gender: 'male').select { count('*') }.as(:male)
       queries << where(surname: false, gender: 'female').select { count('*') }.as(:female)
       queries << where(surname: false, gender: 'enby').select { count('*') }.as(:enby)
-      queries << where(surname: false, gender: nil).select { count('*') }.as(:unset)
 
       stats = DB.select { queries }.first
       total = stats.delete :total
@@ -132,8 +133,7 @@ class Name < Sequel::Model(:names_scored)
       genders = {
         male: stats.delete(:male),
         female: stats.delete(:female),
-        enby: stats.delete(:enby),
-        unset: stats.delete(:unset)
+        enby: stats.delete(:enby)
       }
 
       {
@@ -215,15 +215,16 @@ class Name < Sequel::Model(:names_scored)
     def amend_args(args, plus, minus)
       new_args = args.clone
       new_args[:kinds] = args[:kinds] - [minus] + [plus]
+      new_args[:kinds].compact!
       new_args
     end
 
     def args_first_name(args)
-      amend_args(args, 'first', 'last')
+      amend_args(args, nil, 'last')
     end
 
     def args_last_name(args)
-      amend_args(args, 'last', 'first')
+      amend_args(args, 'last', nil)
     end
 
     def get_some_lasts(args, amount)

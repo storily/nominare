@@ -7,7 +7,7 @@ Sequel.migration do
 
       String :name, null: false
       Boolean :surname, null: false, default: false
-      String :gender, null: true
+      String :gender, null: false, default: 'enby'
       column :kinds, 'name_kind[]'
 
       column :added, 'timestamp with time zone', null: false, default: Sequel.lit('CURRENT_TIMESTAMP')

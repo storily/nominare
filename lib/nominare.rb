@@ -89,11 +89,12 @@ class Nominare < Sinatra::Application
 
       details[key] = {
         name: Name.format(name),
-        gender: (info.surname ? false : info.gender),
         kinds: kinds,
         sources: info.sources,
         score: info.score
       }
+
+      details[key][:gender] = info.gender unless info.surname
     end
 
     details.to_json

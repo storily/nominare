@@ -96,8 +96,8 @@ Sequel.migration do
       CREATE INDEX names_scored_kinds_idx ON names_scored USING gin (kinds);
       CREATE INDEX names_scored_kinds_rare_idx ON names_scored USING gin (kinds) WHERE score <= 20;
       CREATE INDEX names_scored_kinds_common_idx ON names_scored USING gin (kinds) WHERE score >= 50;
-      CREATE INDEX names_scored_kinds_female_idx ON names_scored USING gin (kinds) WHERE gender = "female";
-      CREATE INDEX names_scored_kinds_male_idx ON names_scored USING gin (kinds) WHERE gender = "male";
+      CREATE INDEX names_scored_kinds_female_idx ON names_scored USING gin (kinds) WHERE gender = 'female';
+      CREATE INDEX names_scored_kinds_male_idx ON names_scored USING gin (kinds) WHERE gender = 'male';
     SCOREUP
   end
 
