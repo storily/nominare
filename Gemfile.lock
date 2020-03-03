@@ -43,7 +43,7 @@ GEM
     rack-protection (2.0.5)
       rack
     rainbow (3.0.0)
-    rake (12.3.2)
+    rake (12.3.3)
     roman-numerals (0.3.0)
     rubocop (0.64.0)
       jaro_winkler (~> 1.5.1)
