@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 ruby '~>2'
 
-gem 'activesupport', '~>5.0', require: 'active_support/all'
+gem 'activesupport', '~>5.2', require: 'active_support/all'
 gem 'dotenv', '~>2.5', require: 'dotenv/load'
 gem 'foreman', require: false, group: :development
 gem 'memoist', '~>0.15.0'
