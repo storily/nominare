@@ -10,7 +10,7 @@ gem 'memoist', '~>0.15.0'
 gem 'numbers_in_words', '~>0.4.0'
 gem 'pg', '~>1.1'
 gem 'pry', require: false
-gem 'puma', '~>3.12', require: false
+gem 'puma', '~>4.3', require: false
 gem 'rake', '~>12.3'
 gem 'roman-numerals', '~>0.3.0'
 gem 'rubocop', '~> 0.62', require: false, group: %i[development test]
